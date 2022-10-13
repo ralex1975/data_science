@@ -1,2 +1,3 @@
 # data_science
-homework
+very simple and nice job
+место рабочих изысканий
