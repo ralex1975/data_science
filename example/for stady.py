@@ -1,6 +1,11 @@
-from collections import Counter
-# Создаём пустой объект Counter
-cars = ['red', 'blue', 'black', 'black', 'black', 'red', 'blue', 'red', 'white']
-c = Counter(cars)
-print(c)
-print(7**7)
+import calendar
+import datetime
+import pandas as pd
+
+
+# print(calendar.calendar(2021, 2, 2, 6, 3))
+c = calendar.TextCalendar()
+c.prmonth(2021, 1)
+
+my_date = datetime.datetime(2021, 1, 1)
+print(pd.to_datetime(my_date).day_name())

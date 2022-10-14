@@ -1,74 +1,60 @@
 import pandas as pd
 import seaborn as sns
-import calendar
 import datetime
 from time import strftime
-import matplotlib.pyplot as plt
-import re
 
+
+# Указание имени файла загрузки котировок(без расширения)
 tiker = 'HYDR_2021'
-df = pd.read_csv(f'e:\IDE\scientist\{tiker}.csv', index_col='<DATE>', parse_dates=True)
-df = df.sort_index()
-dd = pd.DataFrame(df)
-# print(dd.columns)
+print(f'\n Проверка гипотезы: \n - повышенных покупок в понедельник \n - больших распродаж в пятницу \n Обработка акции {tiker} за год')
+# Загрузка данный во ФреймДату
+data_read = pd.read_csv(f'e:\IDE\scientist\{tiker}.csv', index_col='<DATE>', parse_dates=True)
+data_frame = pd.DataFrame(data_read)
+data_frame = data_frame.reset_index()
 
+# Поиск всех понедельников и расчет % роста и падения
+value_up_mo = value_down_mo = 0
+for i in range(len(data_frame)):
+    date_all = data_frame['<DATE>'][i].strftime("%Y-%m-%d")
+    date_i = datetime.datetime.strptime(date_all, '%Y-%m-%d')
+    line = data_frame['<CLOSE>'][i] - data_frame['<OPEN>'][i]
+    if pd.to_datetime(date_i).day_name() == 'Monday' and line > 0:
+        value_up_mo += 1
+    if pd.to_datetime(date_i).day_name() == 'Monday' and line < 0:
+        value_down_mo += 1     
+procent_up_mo = value_up_mo * 100 / (value_up_mo + value_down_mo)
+procent_down_mo = value_down_mo * 100 / (value_up_mo + value_down_mo)   
 
-frame = {}
-data_dd_reset = dd.reset_index()
-sdf = data_dd_reset
-a = data_dd_reset[3::5]
-a = a.reset_index()
-
-# расчет понедельников
-p = data_dd_reset[4::5]
-p = p.reset_index()
-# print(p)
-t = {}
-hh = uu = 0
-
-for i in range(len(p)):
-    line = p['<CLOSE>'][i] - p['<OPEN>'][i]
-    if line > 0:
-        hh += 1
-    else:
-        uu += 1
-procentHH = hh * 100 / len(p)
-procentUU = uu * 100 / len(p)
-
-print('Плюсовые закрытия сессий понедельника', round(procentHH), '%')
-print('Распродажи сессий понедельника', round(procentUU), '%')
-print('Рост:', hh, 'дней')
-print('Падение:', uu, 'дней', '\n', '**************')
+# Вывод данных по понедельнику и подтверждение\не гипотезы
+line_split = '* * * * ( ͡° ͜ʖ ͡°) * * * *' # разделитель
+print(line_split) 
+print('Плюсовые закрытия сессий понедельника', round(procent_up_mo), '%')
+print('Распродажи сессий понедельника', round(procent_down_mo), '%')
+#print('Рост:', value_up_mo, 'дней. Падение:', value_down_mo, 'дней')
+if procent_up_mo > procent_down_mo:
+    print('Гипотеза подтверждена', '\n', line_split)
+else:
+    print('Гипотеза не подтверждена', '\n', line_split)
 
 
 # Поиск всех пятниц и расчет % роста и падения
 value_up_fr = value_down_fr = 0
-for i in range(len(sdf)):
-    date_all = sdf['<DATE>'][i].strftime("%Y-%m-%d")
+for i in range(len(data_frame)):
+    date_all = data_frame['<DATE>'][i].strftime("%Y-%m-%d")
     date_i = datetime.datetime.strptime(date_all, '%Y-%m-%d')
-    line = sdf['<CLOSE>'][i] - sdf['<OPEN>'][i]
+    line = data_frame['<CLOSE>'][i] - data_frame['<OPEN>'][i]
     if pd.to_datetime(date_i).day_name() == 'Friday' and line > 0:
         value_up_fr += 1
     if pd.to_datetime(date_i).day_name() == 'Friday' and line < 0:
         value_down_fr += 1     
-procent_up = value_up_fr * 100 / (value_up_fr + value_down_fr)
-procent_down = value_down_fr * 100 / (value_up_fr + value_down_fr)   
+procent_up_fr = value_up_fr * 100 / (value_up_fr + value_down_fr)
+procent_down_fr = value_down_fr * 100 / (value_up_fr + value_down_fr)   
 
-# Вывод данных
-print('!!Плюсовые закрытия пятничных сессий', round(procent_up), '%')
-print('!!Распродажи пятничных сессий', round(procent_down), '%')
-print('!!Кол-во пятниц:', value_up_fr + value_down_fr, 'дней')
-print('!!Рост:', value_up_fr, 'дней')
-print('!!Падение:', value_down_fr, 'дней', '\n', '**************') 
-        
-
-
-
-
-            
-
-
-
-
-#my_date = datetime.datetime(2021, 1, 1)
-#print(pd.to_datetime(my_date).day_name())
+# Вывод данных по пятнице и подтверждение\не гипотезы
+print('Плюсовые закрытия пятничных сессий', round(procent_up_fr), '%')
+print('Распродажи пятничных сессий', round(procent_down_fr), '%')
+#print('Рост:', value_up_fr, 'дней. Падение:', value_down_fr, 'дней')
+if procent_down_fr > procent_up_fr:
+    print('Гипотеза подтверждена', '\n', line_split, '\n')
+else:
+    print('Гипотеза не подтверждена', '\n', line_split, '\n')
