@@ -27,8 +27,7 @@ procent_down_mo = value_down_mo * 100 / (value_up_mo + value_down_mo)
 
 # Вывод данных по понедельнику и подтверждение\не гипотезы
 line_split = '* * * * ( ͡° ͜ʖ ͡°) * * * *' # разделитель
-print(line_split) 
-print('Плюсовые закрытия сессий понедельника', round(procent_up_mo), '%')
+print(line_split, '\n Плюсовые закрытия сессий понедельника', round(procent_up_mo), '%')
 print('Распродажи сессий понедельника', round(procent_down_mo), '%')
 #print('Рост:', value_up_mo, 'дней. Падение:', value_down_mo, 'дней')
 if procent_up_mo > procent_down_mo:
