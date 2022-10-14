@@ -6,7 +6,7 @@ from time import strftime
 
 # Указание имени файла загрузки котировок(без расширения)
 tiker = 'HYDR_2021'
-print(f'\n Проверка гипотезы: \n - повышенных покупок в понедельник \n - больших распродаж в пятницу \n Обработка акции {tiker} за год')
+print(f'\nПроверка гипотезы:\n- повышенных покупок в понедельник\n- больших распродаж в пятницу\nОбработка акции {tiker} за год')
 # Загрузка данный во ФреймДату
 data_read = pd.read_csv(f'e:\IDE\scientist\{tiker}.csv', index_col='<DATE>', parse_dates=True)
 data_frame = pd.DataFrame(data_read)
@@ -27,13 +27,13 @@ procent_down_mo = value_down_mo * 100 / (value_up_mo + value_down_mo)
 
 # Вывод данных по понедельнику и подтверждение\не гипотезы
 line_split = '* * * * ( ͡° ͜ʖ ͡°) * * * *' # разделитель
-print(line_split, '\n Плюсовые закрытия сессий понедельника', round(procent_up_mo), '%')
-print('Распродажи сессий понедельника', round(procent_down_mo), '%')
+print(f'{line_split}\nПлюсовые закрытия сессий понедельника {round(procent_up_mo)} %')
+print(f'Распродажи сессий понедельника {round(procent_down_mo)} %')
 #print('Рост:', value_up_mo, 'дней. Падение:', value_down_mo, 'дней')
 if procent_up_mo > procent_down_mo:
-    print('Гипотеза подтверждена', '\n', line_split)
+    print(f'    Гипотеза подтверждена\n{line_split}')
 else:
-    print('Гипотеза не подтверждена', '\n', line_split)
+    print(f'    Гипотеза не подтверждена\n{line_split}')
 
 
 # Поиск всех пятниц и расчет % роста и падения
@@ -50,10 +50,10 @@ procent_up_fr = value_up_fr * 100 / (value_up_fr + value_down_fr)
 procent_down_fr = value_down_fr * 100 / (value_up_fr + value_down_fr)   
 
 # Вывод данных по пятнице и подтверждение\не гипотезы
-print('Плюсовые закрытия пятничных сессий', round(procent_up_fr), '%')
-print('Распродажи пятничных сессий', round(procent_down_fr), '%')
+print(f'Плюсовые закрытия пятничных сессий {round(procent_up_fr)} %')
+print(f'Распродажи пятничных сессий {round(procent_down_fr)} %')
 #print('Рост:', value_up_fr, 'дней. Падение:', value_down_fr, 'дней')
 if procent_down_fr > procent_up_fr:
-    print('Гипотеза подтверждена', '\n', line_split, '\n')
+    print(f'    Гипотеза подтверждена\n{line_split}\n')
 else:
-    print('Гипотеза не подтверждена', '\n', line_split, '\n')
+    print(f'    Гипотеза не подтверждена\n{line_split}\n')
