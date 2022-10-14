@@ -50,13 +50,13 @@ for i in range(tt):
 print(BigFrame)
 
 # Запись фрейма в скуль базу \|/
-engine = create_engine('postgresql://postgres:Quasar3@127.0.0.1/TEST')
-BigFrame.to_sql('HYDR_2021', con=engine, if_exists='replace', index_label='id')
-
+# engine = create_engine('postgresql://postgres:Quasar3@127.0.0.1/TEST')
+# BigFrame.to_sql('HYDR_2021', con=engine, if_exists='replace', index_label='id')
 # Конец записи фрейма /|\
 
- #   data_dd_reset.rename(columns={'<VOL>': '<SPR>'}, inplace=True)
-#   data_dd_reset['<SPR>'][i] = (p['<CLOSE>'][i] - p['<OPEN>'][i]) * 100
+# data_dd_reset.rename(columns={'<VOL>': '<SPR>'}, inplace=True)
+# data_dd_reset['<SPR>'][i] = (p['<CLOSE>'][i] - p['<OPEN>'][i]) * 100
 
-#sns.heatmap(BigFrame, annot = True, cmap= 'RdYlGn')
-#plt.show()
+# Карта хитмап бигфрейма
+# sns.heatmap(BigFrame, annot = True, cmap= 'RdYlGn')
+# plt.show()
