@@ -1,10 +1,11 @@
+import re
 import pandas as pd
 import datetime
 from time import strftime
 
 
 # Указание имени файла загрузки котировок(без расширения)
-tiker = 'HYDR_2021'
+tiker = 'MOEX.SBER_SMAL_2022'
 print(f'\nПроверка гипотезы:\n- повышенных покупок в понедельник\n- больших распродаж в пятницу\nОбработка акции {tiker} за год')
 # Загрузка данный во ФреймДату
 data_read = pd.read_csv(f'e:\IDE\scientist\{tiker}.csv', index_col='<DATE>', parse_dates=True)
@@ -56,3 +57,43 @@ if procent_down_fr > procent_up_fr:
     print(f'    Гипотеза подтверждена\n{line_split}\n')
 else:
     print(f'    Гипотеза не подтверждена\n{line_split}\n')
+    
+    
+    # расчет шага цены
+value_up_fr = value_down_fr = 0
+line_fr = []
+line_date = []
+line_body = []
+k_draft = 1
+if re.findall(r'SBER', tiker) == ['SBER']:
+    k_draft = 25
+if re.findall(r'HYDR', tiker) == ['HYDR']:
+    k_draft = 10000
+ 
+for i in range(len(data_frame)):
+    date_all = data_frame['<DATE>'][i].strftime("%Y-%m-%d")
+    #date_i = datetime.datetime.strptime(date_all, '%Y-%m-%d')
+    line = data_frame['<HIGH>'][i] - data_frame['<LOW>'][i]
+    line_close = data_frame['<CLOSE>'][i] - data_frame['<OPEN>'][i]
+    line_fr.append(int(round(line * k_draft, 3)))
+    line_body.append(int(round(line_close * k_draft, 3)))
+    line_date.append(date_all)
+
+print(len(line_body))
+dd = 175
+print('шаг: ', line_fr[dd], '\nдата: ', line_date[dd])
+
+
+gi = len(line_fr) // 3 + 1
+#print(gi)
+k_line = [123,698,741] * gi
+
+#рабочий график шага цены - линиия
+import matplotlib.pyplot as plt
+plt.plot(line_fr)
+plt.plot(k_line)
+#plt.plot(line_body)
+plt.show()
+
+
+
