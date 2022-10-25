@@ -1,29 +1,25 @@
-from aifc import Error
+from sqlite3 import OperationalError
 import psycopg2
+from sqlalchemy import select
 
-try:
-    # Подключиться к существующей базе данных
-    connection = psycopg2.connect(database='TEST',
+# Подключиться к существующей базе данных
+connection = psycopg2.connect(database='BigData',
                        user='postgres',
                        password='Quasar3',
                        host='127.0.0.1')
 
+def execute_read_query(connection, query):
     cursor = connection.cursor()
-    postgreSQL_select_Query = "SELECT * FROM Пон"
+    result = None
+    try:
+        cursor.execute(query)
+        result = cursor.fetchall()
+        return result
+    except OperationalError as e:
+        print(f"The error '{e}' occurred")
 
-    cursor.execute(postgreSQL_select_Query)
-    print("Выбор строк из таблицы mobile с помощью cursor.fetchall")
-    mobile_records = cursor.fetchall()
-    row = []
-    print("Вывод каждой строки и ее столбцов")
-    print(mobile_records)
-    for i in mobile_records:
-        print("Id =", row[i], )
+select_users = "id"
+users = execute_read_query(connection, select_users)
 
-except (Exception, Error) as error:
-    print("Ошибка при работе с PostgreSQL", error)
-finally:
-    if connection:
-        cursor.close()
-        connection.close()
-        print("Соединение с PostgreSQL закрыто")
+for user in users:
+    print(user)
